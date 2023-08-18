@@ -1,0 +1,13 @@
+gitlab:
+  adminPersonalSecret: "glpat-tGyFCzYXLpFxCG5k9yTL"
+  gitlabEndpoint: "gitlab.redrock.team"
+  protocols: https
+  port: 443
+  avatarSaveLocation: "D:/Study/tmp/imageSave"
+ldap:
+  ldapWebEndpoint: "ldap.redrock.team"
+  username: "admin"
+  password: "m99pxhKkokWlAze4NpHgfiC4v65bLwSvmQez+1afFtKDmCY1r7FS1YJxC+sH0y7U7hn10v+V5WM9YqkQDCTZ4Q9s5zKC30BTE3MtOYFxFFYL4kB8qIm6g/KdD5YkU/VMzCfgpRaIFBlS936T9gOfmKYq9FeCqaApBSevtnui4b4="
+  protocols: https
+  port: 443
+timeZone: 'Asia/Shanghai'

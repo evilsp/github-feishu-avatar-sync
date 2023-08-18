@@ -6,13 +6,10 @@ class gitlab_obtain(object):
 
         self.gl=gitlabLinks
 
-    def get_commitEmails(self):
+    def get_userName(self):
         '''
             Obtain all users info with returns like [(id,commit_email)...] 
         '''
-        commitEmailList=[]
-        for gitlabObject in self.gl.users.list(iterator=True):
-            info = gitlabObject.asdict()
-            commitEmailList.append({"id":info["id"],"commit_email":info["commit_email"]})
+        return self.gl.users.list(iterator=True)
 
     

@@ -38,6 +38,6 @@ class gitlab_contact(object):
             Build gitlab connection
         '''
         targetUrl = f"{self.info['protocols']}://{self.info['gitlabEndpoint']}:{self.info['port']}"
-        gl = gitlab.Gitlab(url=targetUrl, private_token=self.info['adminPersonalSecret'])
+        gl = gitlab.Gitlab(url=targetUrl, private_token=self.info['adminPersonalSecret'], keep_base_url=True)
         return gl
         

@@ -1,5 +1,4 @@
 import requests
-import jwt
 import yaml
 import os
 
@@ -26,12 +25,13 @@ class go_ldap_obtain(object):
             protocols = self.configData["ldap"]["protocols"]
             port = self.configData["ldap"]["port"]
             self.info = {
-                "ldapLoginEndpoint":loginEndpoint,
+                "ldapWebEndpoint":loginEndpoint,
                 "username":username,
                 "password":password,
                 "protocols":protocols,
                 "port":port
                 }
+            self.jwt_token=self.jwt_token_access()
 
         except Exception():
             raise RuntimeError("The content of the provided yaml does not conform to the specification")
@@ -55,23 +55,51 @@ class go_ldap_obtain(object):
 
         if response.status_code == 200:
             print("Request was successful!")
-            return response["data"]["token"] 
+            response_data = response.json()
+            return response_data["data"]["token"] 
         else:
             raise RuntimeError("Request failed with status code:", response.status_code)
         
-    def avatar_url_request(self,access_token):
+    def avatar_url_request(self,username:str):
 
         '''
             Request for target avatar url
         '''
 
+        access_token=self.jwt_token
         targetUrl = f"{self.info['protocols']}://{self.info['ldapWebEndpoint']}:{self.info['port']}/api/user/avatar"
         headers = {
-            "Content-Type" : "application/json; charset=utf-8",
+            "Content-Type": "application/json; charset=utf-8", 
             "Authorization": f"Bearer {access_token}"
         }
         cookies = {
             "gowebmini-Token" : access_token
         }
+        params = {
+            "username": username
+        }
+        response = requests.get(targetUrl, headers = headers, cookies = cookies, params = params)
+        if response.status_code == 200: 
+            print("Request was successful!") 
+            response_data = response.json()  # Convert response to dictionary 
+            return response_data["data"] 
+        else: 
+            print("Request failed with status code:", response.status_code, response.text)
 
-        response = requests.get(targetUrl, headers = headers, cookies = cookies)
+    def file_reserve_request(self,filelocation,targetURL):
+
+        '''
+            Reserve file from targetURL to local filelocation
+        '''
+        if targetURL == None:
+            return "None"
+        else:
+            response = requests.get(targetURL)
+        if response.status_code == 200:
+            with open(filelocation, "wb") as local_file:
+                local_file.write(response.content)
+            print(f"File saved successfully at {filelocation}")
+            return "Success"
+        else:
+            print("File download failed with status code:", response.status_code)
+        return response.status_code
